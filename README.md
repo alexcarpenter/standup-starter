@@ -25,3 +25,9 @@ $ npm run build
 - [ ] Add a light/dark theme toggle
 - [ ] Write some tests
 - [ ] Convert to TypeScript
+
+---
+
+[Website](https://alexcarpenter/me) &bullet;
+[Twitter](https://twitter.com/hybrid_alex) &bullet;
+[CodePen](https://codepen.io/alexcarpenter)
