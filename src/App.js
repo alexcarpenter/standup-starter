@@ -130,6 +130,7 @@ class App extends Component {
 }
 
 const Layout = styled.div`
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
