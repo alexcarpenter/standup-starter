@@ -144,7 +144,10 @@ class App extends Component {
               />
             </svg>
           </SettingsButton>
-          <SelectButton onClick={() => this.selectItem()}>
+          <SelectButton
+            onClick={() => this.selectItem()}
+            disabled={items.length <= 1}
+          >
             {selectedItem
               ? selectedItem
               : items.length > 0
