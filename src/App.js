@@ -51,10 +51,12 @@ class App extends Component {
   selectItem = () => {
     this.setState(
       prevState => {
+        let nextItem
+        do {
+          nextItem = randomItem(prevState.items)
+        } while (nextItem === prevState.selectedItem)
         return {
-          selectedItem: randomItem(
-            prevState.items.filter(item => item !== prevState.selectedItem),
-          ),
+          selectedItem: nextItem,
           confetti: true,
         }
       },
