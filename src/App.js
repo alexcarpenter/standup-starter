@@ -29,28 +29,50 @@ class App extends Component {
     }
     this.addForm.reset()
   }
+  handleSubmit = event => {
+    event.preventDefault()
+    const newItem = this.newItem.value
+    if (newItem) {
+      this.setState(prevState => {
+        return {items: [...prevState.items, newItem]}
+      })
+    } else {
+      return
+    }
+    this.addForm.reset()
+  }
   removeItem = x => {
-    const newItems = this.state.items.filter(item => item !== x)
-    this.setState({
-      items: [...newItems],
+    this.setState(({items}) => {
+      return {
+        items: [...items.filter(item => item !== x)],
+      }
     })
   }
   selectItem = () => {
     this.setState(
-      {
-        selectedItem: randomItem(this.state.items),
-        confetti: true,
+      prevState => {
+        let nextItem
+        do {
+          nextItem = randomItem(prevState.items)
+        } while (nextItem === prevState.selectItem)
+        return {
+          selectedItem: nextItem,
+          confetti: true,
+        }
       },
-      () =>
+      () => {
         this.setState({
           confetti: false,
-        }),
+        })
+      },
     )
   }
   toggleSidebar = e => {
     e.preventDefault()
-    this.setState({
-      sidebarVisible: !this.state.sidebarVisible,
+    this.setState(prevState => {
+      return {
+        sidebarVisible: !prevState.sidebarVisible,
+      }
     })
   }
   render() {
