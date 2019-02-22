@@ -140,7 +140,11 @@ class App extends Component {
             </svg>
           </SettingsButton>
           <SelectButton onClick={() => this.selectItem()}>
-            {selectedItem ? selectedItem : 'Add some team members'}
+            {selectedItem
+              ? selectedItem
+              : items.length > 0
+              ? 'Click here to decide'
+              : 'Add some team members'}
           </SelectButton>
           <Confetti active={confetti} config={config} />
         </div>
