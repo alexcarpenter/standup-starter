@@ -49,6 +49,9 @@ class App extends Component {
     })
   }
   selectItem = () => {
+    if (this.state.items.length <= 1) {
+      return
+    }
     this.setState(
       prevState => {
         let nextItem
