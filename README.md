@@ -5,6 +5,8 @@
 
 Live demo: [standup-starter.netlify.com](https://standup-starter.netlify.com)
 
+![Standup Starter](media/standup-starter.gif)
+
 ## Development
 
 Start the dev server
