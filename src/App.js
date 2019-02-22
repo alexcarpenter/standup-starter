@@ -1,87 +1,104 @@
-import React, {Component} from 'react'
-import randomItem from 'random-item'
-import SimpleStorage from 'react-simple-storage'
-import styled from 'styled-components'
-import Confetti from 'react-dom-confetti'
+import React from "react";
+import randomItem from "random-item";
+import styled from "styled-components";
+import Confetti from "react-dom-confetti";
 
-import {config} from './utils'
+import { config } from "./utils";
 
-class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      items: [],
-      selectedItem: '',
-      confetti: false,
-      sidebarVisible: false,
+class App extends React.Component {
+  state = {
+    items: [],
+    selectedItem: "",
+    confetti: false,
+    sidebarVisible: false
+  };
+
+  componentDidMount() {
+    const items = JSON.parse(localStorage.getItem("STORED_ITEMS"));
+
+    if (items && items.length > 0) {
+      this.setState({ items });
     }
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.items !== this.state.items) {
+      const items = JSON.stringify(this.state.items);
+
+      localStorage.setItem("STORED_ITEMS", items);
+    }
+  }
+
   handleSubmit = event => {
-    event.preventDefault()
-    const {items} = this.state
-    const newItem = this.newItem.value
+    event.preventDefault();
+    const { items } = this.state;
+    const newItem = this.newItem.value;
     if (newItem) {
       this.setState({
-        items: [...items, newItem],
-      })
+        items: [...items, newItem]
+      });
     } else {
-      return
+      return;
     }
-    this.addForm.reset()
-  }
+    this.addForm.reset();
+  };
+
   handleSubmit = event => {
-    event.preventDefault()
-    const newItem = this.newItem.value
+    event.preventDefault();
+    const newItem = this.newItem.value;
     if (newItem) {
       this.setState(prevState => {
-        return {items: [...prevState.items, newItem]}
-      })
+        return { items: [...prevState.items, newItem] };
+      });
     } else {
-      return
+      return;
     }
-    this.addForm.reset()
-  }
+    this.addForm.reset();
+  };
+
   removeItem = x => {
-    this.setState(({items}) => {
+    this.setState(({ items }) => {
       return {
-        items: [...items.filter(item => item !== x)],
-      }
-    })
-  }
+        items: [...items.filter(item => item !== x)]
+      };
+    });
+  };
+
   selectItem = () => {
     this.setState(
       prevState => {
-        let nextItem
+        let nextItem;
         do {
-          nextItem = randomItem(prevState.items)
-        } while (nextItem === prevState.selectItem)
+          nextItem = randomItem(prevState.items);
+        } while (nextItem === prevState.selectItem);
         return {
           selectedItem: nextItem,
-          confetti: true,
-        }
+          confetti: true
+        };
       },
       () => {
         this.setState({
-          confetti: false,
-        })
-      },
-    )
-  }
+          confetti: false
+        });
+      }
+    );
+  };
+
   toggleSidebar = e => {
-    e.preventDefault()
+    e.preventDefault();
     this.setState(prevState => {
       return {
-        sidebarVisible: !prevState.sidebarVisible,
-      }
-    })
-  }
+        sidebarVisible: !prevState.sidebarVisible
+      };
+    });
+  };
+
   render() {
-    const {items, selectedItem, confetti, sidebarVisible} = this.state
+    const { items, selectedItem, confetti, sidebarVisible } = this.state;
     return (
       <Layout>
-        <SimpleStorage parent={this} />
-        <Sidebar className={sidebarVisible ? 'is-visible' : ''}>
-          <CloseButton onClick={e => this.toggleSidebar(e)}>
+        <Sidebar className={sidebarVisible ? "is-visible" : ""}>
+          <CloseButton onClick={this.toggleSidebar}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -107,27 +124,21 @@ class App extends Component {
           </form>
           {items.length ? (
             <List>
-              {items.map((item, index) => {
-                return (
-                  <ListItem key={index}>
-                    {item}{' '}
-                    <RemoveButton
-                      onClick={() => {
-                        return this.removeItem(item)
-                      }}
-                    >
-                      &times;
-                    </RemoveButton>
-                  </ListItem>
-                )
-              })}
+              {items.map((item, index) => (
+                <ListItem key={index}>
+                  {item}{" "}
+                  <RemoveButton onClick={() => this.removeItem(item)}>
+                    &times;
+                  </RemoveButton>
+                </ListItem>
+              ))}
             </List>
           ) : (
-            ''
+            ""
           )}
         </Sidebar>
         <div>
-          <SettingsButton onClick={e => this.toggleSidebar(e)}>
+          <SettingsButton onClick={this.toggleSidebar}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -141,13 +152,13 @@ class App extends Component {
               />
             </svg>
           </SettingsButton>
-          <SelectButton onClick={() => this.selectItem()}>
-            {selectedItem ? selectedItem : 'Add some team members'}
+          <SelectButton onClick={this.selectItem}>
+            {selectedItem ? selectedItem : "Add some team members"}
           </SelectButton>
           <Confetti active={confetti} config={config} />
         </div>
       </Layout>
-    )
+    );
   }
 }
 
@@ -158,7 +169,7 @@ const Layout = styled.div`
   justify-content: center;
   width: 100%;
   min-height: 100vh;
-`
+`;
 
 const Sidebar = styled.div`
   position: fixed;
@@ -174,11 +185,11 @@ const Sidebar = styled.div`
   &.is-visible {
     transform: none;
   }
-`
+`;
 
 const List = styled.ul`
   list-style: none;
-`
+`;
 
 const ListItem = styled.li`
   display: flex;
@@ -189,7 +200,7 @@ const ListItem = styled.li`
     padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
   }
-`
+`;
 
 const Label = styled.label`
   position: absolute !important;
@@ -198,13 +209,13 @@ const Label = styled.label`
   overflow: hidden;
   clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
   clip: rect(1px, 1px, 1px, 1px);
-`
+`;
 
 const FormGroup = styled.div`
   margin-bottom: 2rem;
   display: flex;
   width: 100%;
-`
+`;
 
 const Input = styled.input`
   flex: 1;
@@ -218,7 +229,7 @@ const Input = styled.input`
     outline: 0;
     box-shadow: 0 0 0 0.25rem #1498be;
   }
-`
+`;
 
 const InputSubmit = styled.input`
   appearance: none;
@@ -234,7 +245,7 @@ const InputSubmit = styled.input`
     outline: 0;
     box-shadow: 0 0 0 0.25rem #1498be;
   }
-`
+`;
 
 const RemoveButton = styled.button`
   appearance: none;
@@ -248,7 +259,7 @@ const RemoveButton = styled.button`
   color: #fff;
   border: 0;
   cursor: pointer;
-`
+`;
 
 const SelectButton = styled.button`
   appearance: none;
@@ -257,15 +268,14 @@ const SelectButton = styled.button`
   left: 0;
   width: 100%;
   height: 100%;
-  font-inherit;
-  font-size: 3rem;
+  font-family: inherit;
   font-size: 10vw;
   font-weight: 700;
   color: #fff;
   background-color: transparent;
   border: 0;
   cursor: pointer;
-`
+`;
 
 const SettingsButton = styled.button`
   position: absolute;
@@ -278,7 +288,7 @@ const SettingsButton = styled.button`
   color: #fff;
   z-index: 10;
   cursor: pointer;
-`
+`;
 
 const CloseButton = styled.button`
   appearance: none;
@@ -286,6 +296,6 @@ const CloseButton = styled.button`
   background-color: transparent;
   margin-bottom: 2rem;
   cursor: pointer;
-`
+`;
 
-export default App
+export default App;
