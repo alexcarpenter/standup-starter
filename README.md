@@ -21,6 +21,7 @@ $ npm run build
 
 ## Todo
 
+- [ ] Convert to hooks
 - [ ] Break components up into a `/components` folder
 - [ ] Add a light/dark theme toggle
 - [ ] Write some tests
