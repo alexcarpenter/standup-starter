@@ -11,7 +11,7 @@ class App extends Component {
     super(props)
     this.state = {
       items: [],
-      selectedItem: '',
+      selectedItem: null,
       confetti: false,
       sidebarVisible: false,
     }
