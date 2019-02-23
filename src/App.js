@@ -238,8 +238,8 @@ const InputSubmit = styled.input`
   margin-left: 0.5rem;
   border-radius: 4px;
   cursor: pointer;
+  background-color: #fff;
   &:focus {
-    background-color: #fff;
     border-color: #1498be;
     outline: 0;
     box-shadow: 0 0 0 0.25rem #1498be;
