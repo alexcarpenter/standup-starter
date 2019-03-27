@@ -1,23 +1,23 @@
-import React from "react";
-import randomItem from "random-item";
-import styled from "styled-components";
-import Confetti from "react-dom-confetti";
+import React from 'react';
+import randomItem from 'random-item';
+import styled from 'styled-components';
+import Confetti from 'react-dom-confetti';
 
-import { config } from "./utils";
-import Toggle from "./toggle";
+import {config} from './utils';
+import Toggle from './toggle';
 
 class App extends React.Component {
   state = {
     items: [],
-    selectedItem: "",
-    confetti: false
+    selectedItem: '',
+    confetti: false,
   };
 
   componentDidMount() {
-    const items = JSON.parse(localStorage.getItem("STORED_ITEMS"));
+    const items = JSON.parse(localStorage.getItem('STORED_ITEMS'));
 
     if (items && items.length > 0) {
-      this.setState({ items });
+      this.setState({items});
     }
   }
 
@@ -25,30 +25,16 @@ class App extends React.Component {
     if (prevState.items !== this.state.items) {
       const items = JSON.stringify(this.state.items);
 
-      localStorage.setItem("STORED_ITEMS", items);
+      localStorage.setItem('STORED_ITEMS', items);
     }
   }
-
-  handleSubmit = event => {
-    event.preventDefault();
-    const { items } = this.state;
-    const newItem = this.newItem.value;
-    if (newItem) {
-      this.setState({
-        items: [...items, newItem]
-      });
-    } else {
-      return;
-    }
-    this.addForm.reset();
-  };
 
   handleSubmit = event => {
     event.preventDefault();
     const newItem = this.newItem.value;
     if (newItem) {
       this.setState(prevState => {
-        return { items: [...prevState.items, newItem] };
+        return {items: [...prevState.items, newItem]};
       });
     } else {
       return;
@@ -57,40 +43,38 @@ class App extends React.Component {
   };
 
   removeItem = x => {
-    this.setState(({ items }) => {
+    this.setState(({items}) => {
       return {
-        items: [...items.filter(item => item !== x)]
+        items: [...items.filter(item => item !== x)],
       };
     });
   };
 
   selectItem = () => {
     this.setState(
-      prevState => {
-        let nextItem;
-        do {
-          nextItem = randomItem(prevState.items);
-        } while (nextItem === prevState.selectItem);
+      state => {
         return {
-          selectedItem: nextItem,
-          confetti: true
+          selectedItem: randomItem(
+            state.items.filter(item => item !== state.selectedItem),
+          ),
+          confetti: true,
         };
       },
       () => {
         this.setState({
-          confetti: false
+          confetti: false,
         });
-      }
+      },
     );
   };
 
   render() {
-    const { items, selectedItem, confetti } = this.state;
+    const {items, selectedItem, confetti} = this.state;
     return (
       <Toggle>
-        {({ isOpen, onToggle }) => (
+        {({isOpen, onToggle}) => (
           <Layout>
-            <Sidebar className={isOpen ? "is-visible" : ""}>
+            <Sidebar className={isOpen ? 'is-visible' : ''}>
               <CloseButton onClick={onToggle}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +103,7 @@ class App extends React.Component {
                 <List>
                   {items.map((item, index) => (
                     <ListItem key={index}>
-                      {item}{" "}
+                      {item}{' '}
                       <RemoveButton onClick={() => this.removeItem(item)}>
                         &times;
                       </RemoveButton>
@@ -127,7 +111,7 @@ class App extends React.Component {
                   ))}
                 </List>
               ) : (
-                ""
+                ''
               )}
             </Sidebar>
             <div>
@@ -149,8 +133,8 @@ class App extends React.Component {
                 {selectedItem
                   ? selectedItem
                   : items.length > 0
-                  ? "Click here to decide"
-                  : "Add some team members"}
+                  ? 'Click here to decide'
+                  : 'Add some team members'}
               </SelectButton>
               <Confetti active={confetti} config={config} />
             </div>
